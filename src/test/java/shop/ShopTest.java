@@ -22,6 +22,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import shop.lineItem.LineItemRepository;
 import shop.order.OrderRepository;
@@ -126,17 +127,22 @@ public class ShopTest {
 
         HttpEntity<LineItem> request = new HttpEntity<>(lineItem, headers);
 
-        ResponseEntity<String> responseEntity= restTemplate.postForEntity(lineItemsUri, request, String.class);
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(lineItemsUri, request, String.class);
 
 
-        System.out.println(responseEntity.getHeaders());
-        System.out.println(responseEntity.getBody());
+            System.out.println(responseEntity.getHeaders());
+            System.out.println(responseEntity.getBody());
 
-        assertThat(responseEntity.getHeaders().getLocation(),notNullValue());
+            assertThat(responseEntity.getHeaders().getLocation(), notNullValue());
 
-        System.out.println(responseEntity.getHeaders().getLocation());
+            System.out.println(responseEntity.getHeaders().getLocation());
 
-
+        }
+        catch (HttpClientErrorException e){
+            System.out.println(e.getResponseBodyAsString());
+            throw e;
+        }
 
     }
 

@@ -24,6 +24,8 @@ public class OrderResourceProcessor implements ResourceProcessor<Resource<Order>
                     methodOn(OrderContentsController.class)
                             .createOrderContents(
                                     orderId,
+                                    "lineItems",
+                                    null,
                                     null,
                                     null
                             )
