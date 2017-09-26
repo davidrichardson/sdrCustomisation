@@ -31,6 +31,7 @@ import java.net.URI;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -125,9 +126,16 @@ public class ShopTest {
 
         HttpEntity<LineItem> request = new HttpEntity<>(lineItem, headers);
 
-        String string = restTemplate.postForObject(lineItemsUri, request, String.class);
+        ResponseEntity<String> responseEntity= restTemplate.postForEntity(lineItemsUri, request, String.class);
 
-        System.out.println(string);
+
+        System.out.println(responseEntity.getHeaders());
+        System.out.println(responseEntity.getBody());
+
+        assertThat(responseEntity.getHeaders().getLocation(),notNullValue());
+
+        System.out.println(responseEntity.getHeaders().getLocation());
+
 
 
     }
